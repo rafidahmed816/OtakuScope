@@ -21,9 +21,8 @@ const signup = async (req, res) => {
             return res.status(400).json({ error: 'Invalid input or password too short' });
         }
 
-        // Get the connection instance
-          // Check if the email already exists
-          const [emailRows] = await connection.query(
+        // Check if the email already exists
+        const [emailRows] = await connection.query(
             'SELECT * FROM users WHERE email = ?',
             [email]
         );
@@ -42,18 +41,24 @@ const signup = async (req, res) => {
             return res.status(400).json({ error: 'Username is already taken' });
         }
 
+        // Hash the password and insert the user into the database
         const hashedPassword = await bcrypt.hash(password, 10);
         const [result] = await connection.query(
             'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
             [username, email, hashedPassword]
         );
-        //console.log(result);
+
+        // Generate a token for the new user
+        const userId = result.insertId; // Get the ID of the newly created user
+        const token = generateToken(userId);
+
         res.status(201).json({ message: 'User registered successfully', token });
     } catch (error) {
         console.error('Error during signup:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+
 
 // Login Controller
 const login = async (req, res) => {

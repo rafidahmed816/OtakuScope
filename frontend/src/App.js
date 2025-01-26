@@ -9,7 +9,7 @@ import MyAnime from './components/MyAnime';
 import Lists from './components/Lists';
 import Profile from './components/Profile';
 import Forum from './components/Forum';
-
+import AnimeDetails from './components/AnimeDetails';
 
 const theme = createTheme({
     palette: {
@@ -28,6 +28,7 @@ const App = () => (
         <Router>
             <Routes>
                 <Route path="/" element={<GetStarted />} />
+                <Route path="/:id" element={<AnimeDetails />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/home" element={<Home />} />
