@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const {db} = require('../config/db'); // Import the DB connection function
+const { getDBConnection} = require('../config/db'); // Import the DB connection function
 const express = require('express');
 
 // Generate JWT
@@ -8,7 +8,7 @@ const generateToken = (userId) => {
     if (!process.env.JWT_SECRET) {
         throw new Error('JWT_SECRET is not defined in the environment variables');
     }
-    return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '3h' });
+    return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '111h' });
 };
 
 // Signup Controller
@@ -16,7 +16,7 @@ const signup = async (req, res) => {
     const { username, email, password } = req.body;
 
     try {
-        const connection = await db();
+        const connection = await getDBConnection();
         if (!username || !email || !password || password.length < 8) {
             return res.status(400).json({ error: 'Invalid input or password too short' });
         }
@@ -65,7 +65,7 @@ const login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const connection = await db();
+        const connection = await getDBConnection();
         if (!email || !password) {
             return res.status(400).json({ error: 'Email and password are required' });
         }
@@ -89,7 +89,7 @@ const login = async (req, res) => {
         }
 
         const token = generateToken(user.id);
-        res.json({ message: 'Login successful', token });
+        res.json({ message: 'Login successful', token, username: user.username  });
     } catch (error) {
         console.error('Error during login:', error);
         res.status(500).json({ error: 'Server error' });
