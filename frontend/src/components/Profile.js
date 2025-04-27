@@ -23,6 +23,165 @@ const Profile = () => {
     }
   }, [navigate]);
 
+  const [activeTab, setActiveTab] = useState("Overview");
+  const [showDropdown, setShowDropdown] = useState(false); // Controls dropdown visibility
+  const storeAvatars = [
+    "/AnimeBird.jpg",
+    "/AnimeDog.jpg",
+    "/AnimeFox.jpg",
+    "/OtakuBun.mp4",
+    "/OtakuCat.mp4",
+    "/OtakuFox.mp4",
+    "/OtakuKoala.mp4",
+    "/OtakuOsty.mp4",
+    "/OtakuPeng.mp4",
+    "/OtakuPig.mp4",
+    "/OtakuPorky.mp4",
+    "/OtakuRaff.mp4",
+    "/OtakuSnail.mp4",
+    "/OtakuSnake.mp4",
+    "/OtakuTurt.mp4",
+  ];
+
+  const storeBanners = [
+    "/BlueGirl.jpg",
+    "/BoyCat.jpg",
+    "/CoatGirl.jpg",
+    "/CyberEyes.jpg",
+    "/Cyberpunk.jpg",
+    "/Dragon.jpg",
+    "/GreenDragon.jpg",
+    "/OtakuBeats.jpg",
+    "/RainBoy.jpg",
+    "/RainGirl.jpg",
+    "/RedDragon.jpg",
+    "/SakuraGirl.jpg",
+    "/SkyGirl.jpg",
+    "/Sunset.jpg"
+];
+
+
+  const handleAvatarChange = (event) => {
+    const fileInput = event.target; // Store reference to the input element
+    const file = fileInput.files[0];
+    const maxSize = 2 * 1024 * 1024; // 2MB limit
+
+    if (!file) {
+      return; // If user cancels file selection, do nothing
+    }
+
+    if (!file.type.startsWith("image/")) {
+      alert("Only image files are allowed!");
+      fileInput.value = ""; // Reset input
+      return;
+    }
+
+    if (file.size > maxSize) {
+      alert("File is too large. Please choose an image under 2MB.");
+      fileInput.value = ""; // Reset input
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      try {
+        setAvatar(reader.result);
+        localStorage.setItem("avatar", reader.result);
+      } catch (error) {
+        if (error.name === "QuotaExceededError") {
+          alert("Storage limit exceeded! Please clear some space.");
+        } else {
+          console.error("Error saving avatar:", error);
+        }
+      }
+    };
+    reader.readAsDataURL(file);
+
+    fileInput.value = ""; // Reset input after processing
+  };
+
+  const handleBannerChange = (event) => {
+    const fileInput = event.target;
+    const file = fileInput.files[0];
+    const maxSize = 3 * 1024 * 1024; // 3MB limit
+
+    if (!file) return; // User canceled selection
+
+    if (!file.type.startsWith("image/")) {
+        alert("Only image files are allowed!");
+        fileInput.value = ""; // Reset input
+        return;
+    }
+
+    if (file.size > maxSize) {
+        alert("File is too large. Please choose an image under 3MB.");
+        fileInput.value = ""; // Reset input
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+        try {
+            if (banner !== reader.result) { // Prevent unnecessary re-renders
+                setBanner(reader.result);
+                localStorage.setItem("banner", reader.result);
+            }
+        } catch (error) {
+            if (error.name === "QuotaExceededError") {
+                alert("Storage limit exceeded! Please clear some space.");
+            } else {
+                console.error("Error saving banner:", error);
+            }
+        }
+    };
+
+    reader.readAsDataURL(file);
+    fileInput.value = ""; // Reset input after processing
+};
+
+
+  const openEditingTab = (tab) => {
+    setIsEditing(true);
+    setEditingTab(tab);
+  };
+
+  const closeEditingTab = () => {
+    setIsEditing(false);
+    setEditingTab(null);
+  };
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    setShowDropdown(false); // Close dropdown on tab change
+  };
+
+  const handleRemoveAvatar = () => {
+    setAvatar("/AnimeGirl.png");
+    localStorage.removeItem("avatar");
+  };
+
+  const handleRemoveBanner = () => {
+    setBanner("/AnimeBanner.jpg");
+    localStorage.removeItem("banner");
+  };
+
+  const handleStoreAvatarSelect = (avatarOption) => {
+    setAvatar(avatarOption);
+    localStorage.setItem("avatar", avatarOption);
+    setShowDropdown(false);
+  };
+
+  const handleStoreBannerSelect = (bannerOption) => {
+    setBanner(bannerOption);
+    localStorage.setItem("banner", bannerOption);
+    setShowDropdown(false);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token'); // Clear the token
+    navigate('/'); // Redirect to the Get Started page
+  };
+
 return (
     <div className="profileContainer">
 
