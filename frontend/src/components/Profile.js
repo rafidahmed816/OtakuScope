@@ -58,21 +58,8 @@ const Profile = () => {
     "/SakuraGirl.jpg",
     "/SkyGirl.jpg",
     "/Sunset.jpg"
-  ];
+];
 
-  const [stats, setStats] = useState({
-    totalAnime: 0,
-    watching: 0,
-    completed: 0,
-    favoritesCount: 0,
-    currentlyWatching: [],
-    favoriteAnime: [],
-    distribution: {
-      watching: 0,
-      watched: 0,
-      plan_to_watch: 0
-    }
-  });
 
   const handleAvatarChange = (event) => {
     const fileInput = event.target; // Store reference to the input element
@@ -150,7 +137,7 @@ const Profile = () => {
 
     reader.readAsDataURL(file);
     fileInput.value = ""; // Reset input after processing
-  };
+};
 
 
   const openEditingTab = (tab) => {
@@ -400,93 +387,12 @@ return (
 
       {/* Content Display */}
       <div className="profileContent">
-
         {activeTab === "Overview" && (
           <div className="overview">
             <div className="animeColumn">Anime interactions go here...</div>
             <div className="actionsColumn">Action log goes here...</div>
           </div>
         )}
-
-{activeTab === "Stats" && (
-  <div className="statsContainer">
-    <h2 className="statsHeader">{username}'s Statistics</h2>
-    
-    {/* Quick Stats Overview */}
-    <div className="quickStats">
-      <div className="statCard">
-        <div className="statNumber">{stats.totalAnime}</div>
-        <div className="statLabel">Total Anime</div>
-      </div>
-      <div className="statCard">
-        <div className="statNumber">{stats.watching}</div>
-        <div className="statLabel">Watching</div>
-      </div>
-      <div className="statCard">
-        <div className="statNumber">{stats.completed}</div>
-        <div className="statLabel">Completed</div>
-      </div>
-      <div className="statCard">
-        <div className="statNumber">{stats.favoritesCount}</div>
-        <div className="statLabel">Favorites</div>
-      </div>
-    </div>
-
-    {/* Detailed Sections */}
-    <div className="statsSections">
-      {/* Currently Watching */}
-      <div className="statsSection">
-        <h3>Currently Watching ({stats.watching})</h3>
-        {stats.currentlyWatching.length > 0 ? (
-          <div className="animeGrid">
-            {stats.currentlyWatching.map(anime => (
-              <div key={anime.id} className="animeCard">
-                <img src={anime.image || '/default-anime.jpg'} alt={anime.title} />
-                <div className="animeTitle">{anime.title}</div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="noDataMessage">No currently watching anime</p>
-        )}
-      </div>
-
-      {/* Favorite Anime */}
-      <div className="statsSection">
-        <h3>Favorite Anime ({stats.favoritesCount})</h3>
-        {stats.favoriteAnime.length > 0 ? (
-          <div className="animeGrid">
-            {stats.favoriteAnime.map(anime => (
-              <div key={anime.id} className="animeCard favorite">
-                <img src={anime.image || '/default-anime.jpg'} alt={anime.title} />
-                <div className="animeTitle">{anime.title}</div>
-                <div className="score">★ {anime.score || 'N/A'}</div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="noDataMessage">No favorite anime yet</p>
-        )}
-      </div>
-
-      {/* Anime Distribution */}
-      <div className="statsSection">
-        <h3>Anime Distribution</h3>
-        <div className="statusChart">
-          <div className="chartBar" style={{ width: `${stats.distribution.watching}%` }}>
-            <span>Watching ({stats.distribution.watching}%)</span>
-          </div>
-          <div className="chartBar" style={{ width: `${stats.distribution.watched}%` }}>
-            <span>Watched ({stats.distribution.watched}%)</span>
-          </div>
-          <div className="chartBar" style={{ width: `${stats.distribution.plan_to_watch}%` }}>
-            <span>Plan to Watch ({stats.distribution.plan_to_watch}%)</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
       </div>
     </div>
   );
