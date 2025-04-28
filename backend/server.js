@@ -6,7 +6,7 @@ const animeRoutes = require('./routes/animeRoutes');
 // const listRoutes = require('./routes/listRoutes');
 const { checkConnection } = require('./config/db');
 const verifyToken = require('./middleware/authMiddleware')
-// const reviewRoutes = require('./routes/reviewRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
 
 
 const app = express();
@@ -20,7 +20,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/profile', statsRoutes);
 app.use('/api/anime', verifyToken, animeRoutes); // Protect anime routes with the verifyToken middleware
 // app.use('/api/lists', listRoutes); // Protect list routes with the verifyToken middleware
-// app.use('/api/reviews', listRoutes);
+app.use('/api/reviews', reviewRoutes);
 const PORT = process.env.PORT || 5000;
 
 // Start the server
