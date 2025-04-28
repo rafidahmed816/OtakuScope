@@ -18,6 +18,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import './../styles/ReviewSection.css';
 import ReviewItem from './ReviewItem';
+import ReviewPagination from './ReviewPagination';
 
 const backendPath = "http://localhost:5000";
 
@@ -223,7 +224,11 @@ const ReviewSection = ({ animeId }) => {
                     {otherReviews.map((review, index) => (
                       <ReviewItem key={review.id} review={review} index={offset + index + 1} />
                     ))}
-
+                    <ReviewPagination
+                      offset={offset}
+                      total={totalReviews}
+                      onOffsetChange={(newOffset) => setOffset(newOffset)}
+                    />
                   </Box>
 
                 ) : <Typography>No reviews yet. Be the first to review!</Typography>}
