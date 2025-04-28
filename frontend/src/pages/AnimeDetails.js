@@ -16,7 +16,7 @@ import {
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import "./../styles/AnimeDetails.css";
-// import ReviewSection from "../components/ReviewSection";
+import ReviewSection from "../components/ReviewSection";
 // import AddToListModal from "../components/AddToListModal";
 const backendPath = "http://localhost:5000";
 
@@ -587,9 +587,9 @@ const AnimeDetails = () => {
           </div>
         </div>
       </div>
-      {/* <div className="reviews-section-wrapper">
+      <div className="reviews-section-wrapper">
         <ReviewSection animeId={id} />
-      </div> */}
+      </div>
       <div className="footer">
         <p>© 2023 Anime Reviews. All rights reserved.</p>
       </div>
