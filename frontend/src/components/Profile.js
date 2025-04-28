@@ -10,8 +10,11 @@ const Profile = () => {
   const [editingTab, setEditingTab] = useState("profileEditing");
   const [avatar, setAvatar] = useState(localStorage.getItem("avatar") || "/AnimeGirl.png");
   const [banner, setBanner] = useState(localStorage.getItem("banner") || "/AnimeBanner.jpg");
+  const [activeTab, setActiveTab] = useState("Overview");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate(); // Added for navigation functionality if needed
 
+    //activeTab as dependency
 
   useEffect(() => {
     // Retrieve username from localStorage
@@ -23,7 +26,63 @@ const Profile = () => {
     }
   }, [navigate]);
 
-  const [activeTab, setActiveTab] = useState("Overview");
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+          const token = localStorage.getItem('token');
+          if (!token) {
+              console.error("No authentication token found");
+              return; // Exit if no token is available
+          }
+          
+          console.log("Fetching stats with token:", token); // Add this to debug
+          
+          const response = await fetch('http://localhost:5000/api/profile/stats', {
+              method: 'GET', // Explicitly set method
+              headers: { 
+                  'Authorization': `Bearer ${token}`,
+                  'Content-Type': 'application/json'
+              }
+          });
+          
+          if (!response.ok) {
+              const errorText = await response.text();
+              throw new Error(`Failed to fetch stats: ${response.status} ${errorText}`);
+          }
+          
+          const data = await response.json();
+          console.log("Stats data fetched from API:", data); // Keep this log
+          
+          // Update state with the fetched data
+          setStats({
+              totalAnime: data.totalAnime || 0,
+              watching: data.watching || 0,
+              watched: data.watched || 0,
+              favoritesCount: data.favoritesCount || 0,
+              currentlyWatching: data.currentlyWatching || [],
+              favoriteAnime: data.favoriteAnime || [],
+              distribution: {
+                  watching: parseFloat(data.distribution.watching) || 0,
+                  watched: parseFloat(data.distribution.watched) || 0,
+                  plan_to_watch: parseFloat(data.distribution.plan_to_watch) || 0
+              }
+          });
+      } catch (error) {
+          console.error("Fetch error:", error);
+          // Consider adding user-facing error handling here
+        } finally {
+          setIsLoading(false);
+          }
+  };
+
+    // Only fetch when Stats tab is active
+    if (activeTab === 'Stats') {
+        console.log("Initiating stats fetch for tab:", activeTab);
+        fetchStats();
+    }
+  }, [activeTab]);
+
+  
   const [showDropdown, setShowDropdown] = useState(false); // Controls dropdown visibility
   const storeAvatars = [
     "/AnimeBird.jpg",
@@ -63,7 +122,7 @@ const Profile = () => {
   const [stats, setStats] = useState({
     totalAnime: 0,
     watching: 0,
-    completed: 0,
+    watched: 0,
     favoritesCount: 0,
     currentlyWatching: [],
     favoriteAnime: [],
@@ -412,79 +471,85 @@ return (
   <div className="statsContainer">
     <h2 className="statsHeader">{username}'s Statistics</h2>
     
-    {/* Quick Stats Overview */}
-    <div className="quickStats">
-      <div className="statCard">
-        <div className="statNumber">{stats.totalAnime}</div>
-        <div className="statLabel">Total Anime</div>
-      </div>
-      <div className="statCard">
-        <div className="statNumber">{stats.watching}</div>
-        <div className="statLabel">Watching</div>
-      </div>
-      <div className="statCard">
-        <div className="statNumber">{stats.completed}</div>
-        <div className="statLabel">Completed</div>
-      </div>
-      <div className="statCard">
-        <div className="statNumber">{stats.favoritesCount}</div>
-        <div className="statLabel">Favorites</div>
-      </div>
-    </div>
-
-    {/* Detailed Sections */}
-    <div className="statsSections">
-      {/* Currently Watching */}
-      <div className="statsSection">
-        <h3>Currently Watching ({stats.watching})</h3>
-        {stats.currentlyWatching.length > 0 ? (
-          <div className="animeGrid">
-            {stats.currentlyWatching.map(anime => (
-              <div key={anime.id} className="animeCard">
-                <img src={anime.image || '/default-anime.jpg'} alt={anime.title} />
-                <div className="animeTitle">{anime.title}</div>
-              </div>
-            ))}
+    {isLoading ? (
+      <div className="loadingStats">Loading statistics...</div>
+    ) : (
+      <>
+        {/* Quick Stats Overview */}
+        <div className="quickStats">
+          <div className="statCard">
+            <div className="statNumber">{stats.totalAnime}</div>
+            <div className="statLabel">Total Anime</div>
           </div>
-        ) : (
-          <p className="noDataMessage">No currently watching anime</p>
-        )}
-      </div>
-
-      {/* Favorite Anime */}
-      <div className="statsSection">
-        <h3>Favorite Anime ({stats.favoritesCount})</h3>
-        {stats.favoriteAnime.length > 0 ? (
-          <div className="animeGrid">
-            {stats.favoriteAnime.map(anime => (
-              <div key={anime.id} className="animeCard favorite">
-                <img src={anime.image || '/default-anime.jpg'} alt={anime.title} />
-                <div className="animeTitle">{anime.title}</div>
-                <div className="score">★ {anime.score || 'N/A'}</div>
-              </div>
-            ))}
+          <div className="statCard">
+            <div className="statNumber">{stats.watching}</div>
+            <div className="statLabel">Watching</div>
           </div>
-        ) : (
-          <p className="noDataMessage">No favorite anime yet</p>
-        )}
-      </div>
-
-      {/* Anime Distribution */}
-      <div className="statsSection">
-        <h3>Anime Distribution</h3>
-        <div className="statusChart">
-          <div className="chartBar" style={{ width: `${stats.distribution.watching}%` }}>
-            <span>Watching ({stats.distribution.watching}%)</span>
+          <div className="statCard">
+            <div className="statNumber">{stats.watched}</div>
+            <div className="statLabel">Completed</div>
           </div>
-          <div className="chartBar" style={{ width: `${stats.distribution.watched}%` }}>
-            <span>Watched ({stats.distribution.watched}%)</span>
-          </div>
-          <div className="chartBar" style={{ width: `${stats.distribution.plan_to_watch}%` }}>
-            <span>Plan to Watch ({stats.distribution.plan_to_watch}%)</span>
+          <div className="statCard">
+            <div className="statNumber">{stats.favoritesCount}</div>
+            <div className="statLabel">Favorites</div>
           </div>
         </div>
-      </div>
-    </div>
+        
+        {/* Detailed Sections */}
+        <div className="statsSections">
+          {/* Currently Watching */}
+          <div className="statsSection">
+            <h3>Currently Watching ({stats.watching})</h3>
+            {stats.currentlyWatching && stats.currentlyWatching.length > 0 ? (
+              <div className="animeGrid">
+                {stats.currentlyWatching.map(anime => (
+                  <div key={anime.id} className="animeCard">
+                    <img src={anime.image || '/default-anime.jpg'} alt={anime.title} />
+                    <div className="animeTitle">{anime.title}</div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="noDataMessage">No currently watching anime</p>
+            )}
+          </div>
+
+          {/* Favorite Anime */}
+          <div className="statsSection">
+            <h3>Favorite Anime ({stats.favoritesCount})</h3>
+            {stats.favoriteAnime && stats.favoriteAnime.length > 0 ? (
+              <div className="animeGrid">
+                {stats.favoriteAnime.map(anime => (
+                  <div key={anime.id} className="animeCard favorite">
+                    <img src={anime.image || '/default-anime.jpg'} alt={anime.title} />
+                    <div className="animeTitle">{anime.title}</div>
+                    <div className="score">★ {anime.score || 'N/A'}</div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="noDataMessage">No favorite anime yet</p>
+            )}
+          </div>
+
+          {/* Anime Distribution */}
+          <div className="statsSection">
+            <h3>Anime Distribution</h3>
+            <div className="statusChart">
+              <div className="chartBar" style={{ width: `${stats.distribution.watching}%` }}>
+                <span>Watching ({stats.distribution.watching}%)</span>
+              </div>
+              <div className="chartBar" style={{ width: `${stats.distribution.watched}%` }}>
+                <span>Watched ({stats.distribution.watched}%)</span>
+              </div>
+              <div className="chartBar" style={{ width: `${stats.distribution.plan_to_watch}%` }}>
+                <span>Plan to Watch ({stats.distribution.plan_to_watch}%)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    )}
   </div>
 )}
       </div>
