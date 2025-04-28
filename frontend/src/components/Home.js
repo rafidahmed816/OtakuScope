@@ -1,145 +1,229 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Navbar from './Navbar';
-import { Card, CardContent, CardMedia, Typography, Grid } from '@mui/material';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Navbar from "./Navbar";
+import "./../styles/Home.css";
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Grid,
+  Container,
+  Box,
+  Skeleton,
+  Chip
+} from "@mui/material";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import StarIcon from "@mui/icons-material/Star";
 
 const Home = () => {
-    const navigate = useNavigate();
-    const [trendingNow, setTrendingNow] = useState([]);
-    const [allTimeFavorites, setAllTimeFavorites] = useState([]);
-    const [popularThisSeason, setPopularThisSeason] = useState([]);
+  const navigate = useNavigate();
+  const [trendingNow, setTrendingNow] = useState([]);
+  const [allTimeFavorites, setAllTimeFavorites] = useState([]);
+  const [popularThisSeason, setPopularThisSeason] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            navigate('/');
-        }
-    }, [navigate]);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/");
+    }
+  }, [navigate]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const trendingQuery = `
-                query {
-                  Page(page: 1, perPage: 10) {
-                    media(sort: TRENDING_DESC, type: ANIME) {
-                      id
-                      title {
-                        english
-                        romaji
-                      }
-                      coverImage {
-                        large
-                      }
-                      description
-                    }
-                  }
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const trendingQuery = `
+          query {
+            Page(page: 1, perPage: 6) {
+              media(sort: TRENDING_DESC, type: ANIME) {
+                id
+                title {
+                  english
+                  romaji
                 }
-            `;
-            const favoritesQuery = `
-                query {
-                  Page(page: 1, perPage: 10) {
-                    media(sort: FAVOURITES_DESC, type: ANIME) {
-                      id
-                      title {
-                        english
-                        romaji
-                      }
-                      coverImage {
-                        large
-                      }
-                      description
-                    }
-                  }
+                coverImage {
+                  large
                 }
-            `;
-            const popularQuery = `
-                query {
-                  Page(page: 1, perPage: 10) {
-                    media(season: FALL, seasonYear: 2024, sort: POPULARITY_DESC, type: ANIME) {
-                      id
-                      title {
-                        english
-                        romaji
-                      }
-                      coverImage {
-                        large
-                      }
-                      description
-                    }
-                  }
+                description
+                genres
+                averageScore
+              }
+            }
+          }
+        `;
+        const favoritesQuery = `
+          query {
+            Page(page: 1, perPage: 6) {
+              media(sort: FAVOURITES_DESC, type: ANIME) {
+                id
+                title {
+                  english
+                  romaji
                 }
-            `;
+                coverImage {
+                  large
+                }
+                description
+                genres
+                averageScore
+              }
+            }
+          }
+        `;
+        const popularQuery = `
+          query {
+            Page(page: 1, perPage: 6) {
+              media(season: FALL, seasonYear: 2024, sort: POPULARITY_DESC, type: ANIME) {
+                id
+                title {
+                  english
+                  romaji
+                }
+                coverImage {
+                  large
+                }
+                description
+                genres
+                averageScore
+              }
+            }
+          }
+        `;
 
-            const trendingData = await fetchAniListData(trendingQuery);
-            const favoritesData = await fetchAniListData(favoritesQuery);
-            const popularData = await fetchAniListData(popularQuery);
+        const [trendingData, favoritesData, popularData] = await Promise.all([
+          fetchAniListData(trendingQuery),
+          fetchAniListData(favoritesQuery),
+          fetchAniListData(popularQuery)
+        ]);
 
-            setTrendingNow(trendingData.Page.media);
-            setAllTimeFavorites(favoritesData.Page.media);
-            setPopularThisSeason(popularData.Page.media);
-        };
-
-        fetchData();
-    }, []);
-
-    const fetchAniListData = async (query, variables = {}) => {
-        const response = await fetch('https://graphql.anilist.co', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ query, variables }),
-        });
-        const data = await response.json();
-        return data.data;
+        setTrendingNow(trendingData.Page.media);
+        setAllTimeFavorites(favoritesData.Page.media);
+        setPopularThisSeason(popularData.Page.media);
+      } catch (error) {
+        console.error("Error fetching anime data:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    const renderCards = (data) => (
-        <Grid container spacing={2}>
-            {data.map((item) => (
-                <Grid item xs={12} sm={6} md={4} key={item.id}>
-                    <Card sx={{ maxWidth: 345, backgroundColor: '#1e1e1e', color: '#fff' }}>
-                        <CardMedia
-                            component="img"
-                            height="140"
-                            image={item.coverImage.large}
-                            alt={item.title.english || item.title.romaji}
+    fetchData();
+  }, []);
+
+  const fetchAniListData = async (query, variables = {}) => {
+    const response = await fetch("https://graphql.anilist.co", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ query, variables }),
+    });
+    const data = await response.json();
+    return data.data;
+  };
+
+  // For navigating to AnimeDetails.js with anime ID
+  const handleCardClick = (id) => {
+    navigate(`/anime/${id}`);
+  };
+
+  const renderSectionHeading = (title, icon) => (
+    <Box className="section-heading">
+      {icon}
+      <Typography variant="h5" className="section-title">
+        {title}
+      </Typography>
+    </Box>
+  );
+
+  const renderCards = (data, isLoading) => (
+    <Grid container spacing={3} justifyContent="flex-start">
+      {isLoading
+        ? Array.from(new Array(6)).map((_, index) => (
+            <Grid item xs={12} sm={6} md={4} lg={2} key={index}>
+              <Card className="skeleton-card">
+                <Skeleton variant="rectangular" height={200} animation="wave" />
+                <CardContent>
+                  <Skeleton variant="text" width="80%" />
+                  <Skeleton variant="text" width="100%" />
+                </CardContent>
+              </Card>
+            </Grid>
+          ))
+        : data.map((item) => (
+            <Grid item xs={12} sm={6} md={4} lg={2} key={item.id}>
+              <Card
+                onClick={() => handleCardClick(item.id)}
+                className="anime-card"
+              >
+                <CardMedia
+                  component="img"
+                  height="240"
+                  image={item.coverImage.large}
+                  alt={item.title.english || item.title.romaji}
+                  className="card-media"
+                />
+                <CardContent  className="card-content">
+                  <Typography
+                    variant="subtitle1"
+                    component="div"
+                    className="anime-title"
+                  >
+                    {item.title.english || item.title.romaji}
+                  </Typography>
+
+                  {item.genres && item.genres.length > 0 && (
+                    <Box className="genre-container">
+                      {item.genres.slice(0, 2).map((genre) => (
+                        <Chip
+                          key={genre}
+                          label={genre}
+                          size="small"
+                          className="genre-chip"
                         />
-                        <CardContent>
-                            <Typography gutterBottom variant="h6" component="div">
-                                {item.title.english || item.title.romaji}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary" sx={{ color: '#ccc' }}>
-                                {item.description?.substring(0, 100)}...
-                            </Typography>
-                        </CardContent>
-                    </Card>
-                </Grid>
-            ))}
-        </Grid>
-    );
+                      ))}
+                    </Box>
+                  )}
 
-    return (
-        <div style={{ minHeight: '100vh', backgroundColor: '#121212', padding: '20px', color: '#fff' }}>
-            <Navbar />
-            <div style={{ marginTop: '20px' }}>
-                <Typography variant="h4" gutterBottom>
-                    Trending Now
-                </Typography>
-                {renderCards(trendingNow)}
+                  {item.averageScore && (
+                    <Box className="score-container">
+                      <StarIcon className="star-icon" />
+                      <Typography variant="body2" className="score-text">
+                        {item.averageScore / 10}/10
+                      </Typography>
+                    </Box>
+                  )}
 
-                <Typography variant="h4" gutterBottom style={{ marginTop: '40px' }}>
-                    All-Time Favorites
-                </Typography>
-                {renderCards(allTimeFavorites)}
+                  <Typography
+                    variant="body2"
+                    className="anime-description"
+                  >
+                    {item.description?.replace(/<[^>]*>/g, "") || "No description available."}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+    </Grid>
+  );
 
-                <Typography variant="h4" gutterBottom style={{ marginTop: '40px' }}>
-                    Popular This Season
-                </Typography>
-                {renderCards(popularThisSeason)}
-            </div>
-        </div>
-    );
+  return (
+    <Box className="home-container">
+      <Navbar />
+      <Container maxWidth="xl" className="content-container">
+        {renderSectionHeading("Trending Now", <TrendingUpIcon className="trending-icon"  />)}
+        {renderCards(trendingNow, loading)}
+
+        {renderSectionHeading("All-Time Favorites", <FavoriteIcon className="favorites-icon"  />)}
+        {renderCards(allTimeFavorites, loading)}
+
+        {renderSectionHeading("Popular This Season", <StarIcon className="popular-icon"  />)}
+        {renderCards(popularThisSeason, loading)}
+      </Container>
+    </Box>
+  );
 };
 
 export default Home;

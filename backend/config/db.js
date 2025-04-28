@@ -4,12 +4,13 @@ const mysql = require('mysql2/promise');
 const pool = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "7156213111566", // Replace with your database password
-  database: "otakuscope",    // Replace with your database name
+  password: "./Baymax2024", // Replace with your database password
+  database: "otakuscope2",    // Replace with your database name
   waitForConnections: true,
   connectionLimit: 10,       // Maximum number of connections in the pool
   queueLimit: 0              // Unlimited queueing
 });
+
 
 // Function to get a single connection (if needed)
 const getDBConnection = async () => {

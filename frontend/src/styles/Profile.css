@@ -7,13 +7,13 @@
     max-height: 300vh;
     overflow: visible;
   }
-  
+
   .profileHeader {
     position: relative;
     text-align: center;
     margin-bottom: 15px;
   }
-  
+
   .banner {
     position: relative;
     background-color: #282828;
@@ -21,7 +21,7 @@
     width: 100%;
     border-radius: 1px;
   }
-  
+
   .editingOverlay {
     position: fixed;
     top: 0;
@@ -34,7 +34,7 @@
     align-items: center;
     z-index: 10000;
   }
-  
+
   .editingTab {
     background-color: #222;
     padding: 15px;
@@ -46,7 +46,7 @@
     border: 1px solid #cfdfe6;
     box-shadow: 0 0 4.5px #cfdfe6, 0 0 6.3px #cfdfe6;
   }
-  
+
   .storesTab {
     background-color: #222;
     padding: 15px;
@@ -58,9 +58,9 @@
     border: 1px solid #cfdfe6;
     box-shadow: 0 0 4.5px #cfdfe6, 0 0 6.3px #cfdfe6;
   }
-  
-  
-  
+
+
+
   .closeButtonStores {
     background: transparent;
     border: none;
@@ -74,7 +74,7 @@
     top: 5px;
     right: 12px;
   }
-  
+
   .backeditBtn {
     background: rgb(160, 199, 209);
     border: none;
@@ -88,15 +88,15 @@
     box-shadow: 0 0 4px rgb(160, 199, 209), 0 0 8px rgb(160, 199, 209);
     letter-spacing: 0.45px;
   }
-  
+
   .profileTabShadow {
-   
-    
-   
+
+
+
     margin-top: -29px;
   }
-  
-  
+
+
   .storeButtonAvt {
     background: #7d9bdb;
     border: none;
@@ -112,7 +112,7 @@
     margin-top: -15px;
     margin-left: 13px;
   }
-  
+
   .storeButtonBnr {
     background: #7d9bdb;
     border: none;
@@ -126,28 +126,28 @@
     margin-top: -15px;
     letter-spacing: 0.45px;
     width: 130px;
-    
+
   }
-  
+
   .storeGrid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 5px;
     margin-top: 21px;
   }
-  
+
   .storeGridBanner {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
     margin-top: 21px;
   }
-  
+
   .avatarContainer {
     position: relative;
     text-align: center;
     margin-top: -110px;
   }
-  
+
   .avatar {
     width: 136px;
     height: 136px;
@@ -157,7 +157,7 @@
     object-fit: cover;
     object-position: center;
   }
-  
+
   .ProfileEditing {
     font-family: '"Cinzel", serif';
     font-size: 30.2px;
@@ -184,7 +184,7 @@
     font-size: 5px;
     cursor: pointer;
   }
-  
+
   .upAvatarBtn {
     background-color: whitesmoke;
     color: #222;
@@ -195,7 +195,7 @@
     margin: 15px 14px;
     font-size: 15px;
     font-weight: 560;
-    
+
   }
   .removeIcon1 {
     width: 48px;
@@ -239,7 +239,7 @@
     letter-spacing: 0.45px;
     width: 130px;
     margin-top: 20px;
-    
+
   }
   .editProfileGroup {
     position: relative;
@@ -248,7 +248,7 @@
     gap: 1.5px;
     margin-top: -20.4px;
   }
-  
+
   .editProfileIcon {
     width: 52px;
     height: 52px;
@@ -256,25 +256,25 @@
     z-index: 2;
     margin-left: -53px;
   }
-  
+
   .dropdownItem {
     padding: 3px;
     cursor: pointer;
   }
-  
+
   .username {
     font-family: '"Cinzel", serif';
     font-size: 33.2px;
     margin-top: 12px;
   }
-  
+
   .usernameHighLight1 {
     color: #7fb0d1;
     -webkit-text-stroke: 0.54px rgb(58, 167, 240);
     font-weight: 500;
     text-shadow: 0 0 2px rgba(46, 57, 63, 0.66), 0 0 4px rgba(102, 204, 255, 0.6), 0 0 6px rgba(102, 204, 255, 0.54);
   }
-  
+
   .bar {
     border: none;
     height: 1.5px;
@@ -284,7 +284,7 @@
     margin-top: 15px;
     margin-bottom: 27px;
   }
-  
+
   .profileNav {
     display: flex;
     justify-content: center;
@@ -292,7 +292,7 @@
     margin-bottom: 27px;
     margin-top: 21px;
   }
-  
+
   .navButton {
     background-color: #dcdcdc;
     color: #121212;
@@ -306,40 +306,40 @@
     letter-spacing: 0.21px;
     -webkit-text-stroke: 0.27px #121212;
   }
-  
+
   .activeTab {
     background-color: #4dddf0;
     color: #121212;
     -webkit-text-stroke: 0.27px #121212;
     box-shadow: 0 0 2px rgba(24, 43, 49, 0.9), 0 0 4px rgba(17, 71, 88, 0.84), 0 0 8px rgba(17, 56, 70, 0.72), 0 0 12px rgba(0, 163, 217, 0.69);
   }
-  
+
   .profileContent {
     padding: 20px;
     background-color: #1a1a1a;
     border-radius: 10px;
     min-height: 540px;
   }
-  
+
   .overview {
     display: flex;
     justify-content: space-between;
   }
-  
+
   .animeColumn {
     width: 45%;
     background-color: #282828;
     padding: 10px;
     border-radius: 10px;
   }
-  
+
   .actionsColumn {
     width: 45%;
     background-color: #282828;
     padding: 10px;
     border-radius: 10px;
   }
-  
+
   .logoutButton {
     position: absolute;
     top: 7.5px;
@@ -359,12 +359,12 @@
     align-items: center;
     gap: 8px;
   }
-  
+
   .logoutButton:hover {
     background-color: #ff0000;
     color: #222;
   }
-  
+
   .logoutIcon {
     font-size: 1.2rem;
   }
@@ -374,13 +374,13 @@
     justify-content: space-between;
     align-items: center;
   }
-  
+
   .welcomeMessage {
     text-align: left;
     padding-left: 100px;
     margin-left: -90px;
   }
-  
+
   .removeButtonGroup {
     position: relative;
     display: flex;
@@ -388,141 +388,32 @@
     gap: 1.5px;
     margin-top: -1.5px;
   }
-  
+
   .bannerGroup {
     margin-top: -18px;
     margin-left: 51px;
   }
-  
-  
- 
+
+
+
 
   /* New classes for elements that had inline styles */
 .avatarVideo {
     width: 123px;
     height: 123px;
   }
-  
+
   .hiddenFileInput {
     display: none;
   }
-  
+
   .profileButtonsWrapper {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
   }
+
+
+
   
-  
-  /* Quick Stats */
-.quickStats {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 30px;
-}
-
-.statCard {
-  background: rgba(40, 40, 60, 0.7);
-  padding: 15px;
-  border-radius: 8px;
-  text-align: center;
-  flex: 1;
-}
-
-.statNumber {
-  font-size: 24px;
-  font-weight: bold;
-  color: #ff7bac;
-}
-
-.statLabel {
-  font-size: 14px;
-  color: #aaa;
-}
-
-/* Anime Grid */
-.animeGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 15px;
-  margin-top: 15px;
-}
-
-.animeCard {
-  background: rgba(30, 30, 40, 0.8);
-  border-radius: 6px;
-  overflow: hidden;
-  transition: transform 0.2s;
-}
-
-.animeCard:hover {
-  transform: scale(1.05);
-}
-
-.animeCard img {
-  width: 100%;
-  height: 160px;
-  object-fit: cover;
-}
-
-.animeTitle {
-  padding: 8px;
-  font-size: 12px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.progress, .score {
-  padding: 0 8px 8px;
-  font-size: 11px;
-  color: #aaa;
-}
-
-/* Charts */
-.statusChart {
-  margin-top: 15px;
-}
-
-.chartBar {
-  height: 30px;
-  margin-bottom: 8px;
-  background: linear-gradient(90deg, #ff7bac, #ff2d75);
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  padding-left: 10px;
-  font-size: 12px;
-  color: white;
-  transition: width 0.5s ease;
-}
-  
-.noDataMessage {
-  color: #777;
-  font-style: italic;
-  padding: 20px;
-  text-align: center;
-  background: rgba(30, 30, 40, 0.5);
-  border-radius: 6px;
-  margin-top: 10px;
-}
-
-.statsSections {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-
-.statsSection {
-  background: rgba(30, 30, 40, 0.7);
-  padding: 20px;
-  border-radius: 10px;
-}
-
-.no-stats-message {
-  padding: 20px;
-  text-align: center;
-  color: #888;
-  font-style: italic;
-}
