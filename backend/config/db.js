@@ -11,6 +11,7 @@ const pool = mysql.createPool({
   queueLimit: 0              // Unlimited queueing
 });
 
+
 // Function to get a single connection (if needed)
 const getDBConnection = async () => {
   try {
@@ -36,3 +37,4 @@ const checkConnection = async () => {
 };
 
 module.exports = { pool, getDBConnection, checkConnection };
+

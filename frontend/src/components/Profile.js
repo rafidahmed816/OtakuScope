@@ -117,7 +117,7 @@ const Profile = () => {
     "/SakuraGirl.jpg",
     "/SkyGirl.jpg",
     "/Sunset.jpg"
-  ];
+];
 
   const [stats, setStats] = useState({
     totalAnime: 0,
@@ -209,7 +209,7 @@ const Profile = () => {
 
     reader.readAsDataURL(file);
     fileInput.value = ""; // Reset input after processing
-  };
+};
 
 
   const openEditingTab = (tab) => {
@@ -459,7 +459,6 @@ return (
 
       {/* Content Display */}
       <div className="profileContent">
-
         {activeTab === "Overview" && (
           <div className="overview">
             <div className="animeColumn">Anime interactions go here...</div>
