@@ -27,7 +27,7 @@ const ReviewSection = ({ animeId }) => {
     const [otherReviews, setOtherReviews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [offset, setOffset] = useState(0);
-    const [totalReviews, setTotalReviews] = useState(0);
+    const [totalReviews, setTotalReviews] = useState(1);
     const [isEditing, setIsEditing] = useState(false);
     const [reviewTitle, setReviewTitle] = useState('');
     const [reviewContent, setReviewContent] = useState('');
