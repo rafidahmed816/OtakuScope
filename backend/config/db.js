@@ -2,7 +2,7 @@ const mysql = require('mysql2/promise');
 
 let connection;
 
-const getDBConnection = async () => {
+const db = async () => {
   try {
     if (!connection) {
       connection = await mysql.createConnection({
@@ -24,7 +24,7 @@ const getDBConnection = async () => {
 // Function to check if the connection is alive
 const checkConnection = async () => {
     try {
-      const conn = await getDBConnection(); // Get the connection instance
+      const conn = await db(); // Get the connection instance
       await conn.ping(); // Test the connection
       console.log("Database connection is active.");
     } catch (err) {
@@ -32,4 +32,4 @@ const checkConnection = async () => {
     }
   };
   
-module.exports = { getDBConnection, checkConnection };
+module.exports = { db, checkConnection };
