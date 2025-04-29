@@ -1,7 +1,3 @@
-Got it — I’ll create a **README** section and **folder structure** for your project **"OtakuScope"**, based on what you've shared so far.
-
----
-
 # 📖 OtakuScope
 
 **OtakuScope** is an anime tracking and recommendation web application where users can:
@@ -9,8 +5,9 @@ Got it — I’ll create a **README** section and **folder structure** for your 
 - Create custom anime lists
 - View other users' public lists
 - Track and manage their watched anime
-- Get recommendations based on anime similarity
-
+- Review, rate anime
+- Search anime
+  
 ---
 
 ## 🛠 Technologies Used
@@ -18,7 +15,7 @@ Got it — I’ll create a **README** section and **folder structure** for your 
 **Frontend**:
 - React.js (with React Router DOM)
 - Axios (for API requests)
-- Tailwind CSS / Inline CSS (for styling)
+- Material UI
 - Anilist API (for anime metadata and images)
 
 **Backend**:
@@ -95,7 +92,7 @@ otakuscope/
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/otakuscope.git
+   git clone https://github.com/rafidahmed816/otakuscope.git
    ```
 
 2. Install dependencies for both backend and frontend:
