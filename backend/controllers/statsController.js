@@ -18,27 +18,27 @@ const getStats = async (req, res) => {
             [favoriteAnimesResult],
             [currentlyWatchingResult]
         ] = await Promise.all([
-            connection.execute('CALL GetUserAnimeListCount(?)', [userId]),
-            connection.execute('CALL GetUserWatchingCount(?)', [userId]),
-            connection.execute('CALL GetUserWatchedCount(?)', [userId]),
-            connection.execute('CALL GetUserFavoritesCount(?)', [userId]),
+            connection.execute('SELECT GetUserAnimeListCountFn(?) AS total_anime_count', [userId]),
+            connection.execute('SELECT GetUserWatchingCount(?) AS watching_count', [userId]),
+            connection.execute('SELECT GetUserWatchedCount(?) AS watched_anime_count', [userId]),
+            connection.execute('SELECT GetUserFavoritesCount(?) AS fav_count', [userId]),
             connection.execute('CALL GetFavoriteAnimes(?)', [userId]),
             connection.execute('CALL GetCurrentlyWatching(?)', [userId])
         ]);
 
         // Release the connection back to the pool
-        connection.release();
-        /*
+        //connection.release();
+        
         console.log("Total Result:", totalResult);
-        console.log("Watching Result:", watchingResult);
+       /* console.log("Watching Result:", watchingResult);
         console.log("Watched Result:", watchedResult);
         console.log("Favorites Result:", favoritesResult);
         */
 
         // Calculate statistics
-        const total = totalResult[0][0]?.total_anime_count || 0;
-        const watching = watchingResult[0][0]?.watching_anime_count || 0;
-        const watched = watchedResult[0][0]?.watched_anime_count || 0;
+        const total = totalResult[0]?.total_anime_count || 0;
+        const watching = watchingResult[0]?.watching_count || 0;
+        const watched = watchedResult[0]?.watched_anime_count || 0;
         const planToWatch = total - watching - watched;
 
         // Handle distribution calculation to avoid NaN
@@ -59,18 +59,18 @@ const getStats = async (req, res) => {
             totalAnime: total,
             watching: watching,
             watched: watched,
-            favoritesCount: favoritesResult[0][0]?.favorites_count || 0,
-            currentlyWatching: currentlyWatchingResult[0]?.map(item => ({
-                id: item.anime_id,
+            favoritesCount: favoritesResult[0]?.fav_count || 0,
+            currentlyWatching: currentlyWatchingResult.map(item => ({
+                id: item.id,
                 title: item.title_romaji,
                 image: item.cover_image
-            })) || [],
-            favoriteAnime: favoriteAnimesResult[0]?.map(item => ({
-                id: item.anime_id,
+            })),
+            favoriteAnime: favoriteAnimesResult.map(item => ({
+                id: item.id,
                 title: item.title_romaji,
                 image: item.cover_image,
-                score: item.score || null
-            })) || [],
+                score: item.score
+            })),
             distribution: distribution
         });
     } catch (error) {
