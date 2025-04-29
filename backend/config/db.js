@@ -12,7 +12,6 @@ const getDBConnection = async () => {
         password: "./Baymax2024",
         database: "otakuscope",
       });
-       //  we're using single connection
     }
     return connection;
   } catch (err) {
@@ -32,12 +31,5 @@ const checkConnection = async () => {
   }
 };
 
-// Add this new function
-const endConnection = async () => {
-  if (connection) {
-    await connection.end();
-    connection = null;
-  }
-};
 
 module.exports = { getDBConnection, checkConnection };

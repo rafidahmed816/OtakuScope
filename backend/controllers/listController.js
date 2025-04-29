@@ -25,7 +25,7 @@ exports.getLists = async (req, res) => {
       
       // 1) fetch lists + count
       const [lists] = await db.query(
-        `SELECT l.id, l.name, COUNT(al.anime_id) AS animeCount
+        `SELECT l.id, l.name, l.updated_at, COUNT(al.anime_id) AS animeCount
          FROM lists l
          LEFT JOIN anime_lists al ON l.id = al.list_id
          WHERE l.user_id = ?
@@ -33,6 +33,7 @@ exports.getLists = async (req, res) => {
          ORDER BY l.created_at DESC`,
         [userId]
       );
+      
   
       // 2) fetch all anime-to-list mappings for this user’s lists
       const [animeLists] = await db.query(
@@ -52,9 +53,11 @@ exports.getLists = async (req, res) => {
       const fullLists = lists.map(list => ({
         id: list.id,
         name: list.name,
+        updatedAt: list.updated_at,
         animeCount: list.animeCount,
         animeIds: listAnimeMap[list.id] || []
       }));
+      
   
       res.status(200).json(fullLists);
     } catch (err) {
@@ -64,7 +67,7 @@ exports.getLists = async (req, res) => {
   };
   
 
-// Get anime IDs inside a specific list
+// Updated backend route: GET list metadata + anime IDs
 exports.getAnimeInList = async (req, res) => {
   const userId = req.user.id;
   const { listId } = req.params;
@@ -81,12 +84,16 @@ exports.getAnimeInList = async (req, res) => {
       [listId]
     );
 
-    res.status(200).json(animeList.map(row => row.anime_id));
+    return res.status(200).json({
+      animeIds: animeList.map(row => row.anime_id),
+      updatedAt: listCheck[0].updated_at, // <--- include updated_at
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
   }
 };
+
 
 // Add an anime to a list
 exports.addAnimeToList = async (req, res) => {
@@ -145,12 +152,13 @@ exports.getUserLists = async (req, res) => {
     try {
       const db = await getDBConnection();
       const [lists] = await db.query(`
-        SELECT l.id, l.name, COUNT(al.anime_id) as animeCount
+        SELECT l.id, l.name, l.updated_at, COUNT(al.anime_id) as animeCount
         FROM lists l
         LEFT JOIN anime_lists al ON l.id = al.list_id
         WHERE l.user_id = ?
         GROUP BY l.id
       `, [userId]);
+      
   
       // Now fetch anime ids inside each list
       const [animeLists] = await db.query(`
@@ -166,8 +174,10 @@ exports.getUserLists = async (req, res) => {
   
       const fullLists = lists.map(list => ({
         ...list,
+        updatedAt: list.updated_at,
         animeIds: listAnimeMap[list.id] || [],
       }));
+      
   
       res.json(fullLists);
     } catch (err) {
@@ -187,12 +197,13 @@ exports.getAllLists = async (req, res) => {
     
     // 1) Fetch paginated lists + user names
     const [lists] = await db.query(`
-      SELECT l.id, l.name, l.user_id, u.username
+      SELECT l.id, l.name, l.user_id, l.updated_at, u.username
       FROM lists l
       JOIN users u ON l.user_id = u.id
       ORDER BY l.created_at DESC
       LIMIT ? OFFSET ?
     `, [limit, offset]);
+    
 
     if (lists.length === 0) {
       return res.json([]);
@@ -217,9 +228,10 @@ exports.getAllLists = async (req, res) => {
       id: list.id,
       name: list.name,
       username: list.username,
+      updatedAt: list.updated_at,
       animeIds: listAnimeMap[list.id] || []
     }));
-
+    
     // 4) Also fetch total number of lists (for hasMore)
     const [countResult] = await db.query(`SELECT COUNT(*) as total FROM lists`);
     const total = countResult[0]?.total || 0;
