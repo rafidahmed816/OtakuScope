@@ -18,12 +18,11 @@ exports.createList = async (req, res) => {
 };
 
 // Get all lists with anime for a user
-// controllers/lists.js
 exports.getLists = async (req, res) => {
     const userId = req.user.id;
     try {
       const db = await getDBConnection();
-  
+      
       // 1) fetch lists + count
       const [lists] = await db.query(
         `SELECT l.id, l.name, COUNT(al.anime_id) AS animeCount

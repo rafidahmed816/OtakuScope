@@ -9,7 +9,7 @@ const getDBConnection = async () => {
       connection = await mysql.createConnection({
         host: "localhost",
         user: "root",
-        password: "7156213111566",
+        password: "./Baymax2024",
         database: "otakuscope",
       });
        //  we're using single connection

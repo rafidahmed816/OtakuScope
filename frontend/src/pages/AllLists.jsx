@@ -210,6 +210,10 @@ const AllLists = () => {
   );
 };
 
+// ------------------------
+// Helper: AnimeBox component
+// ------------------------
+
 const AnimeBox = ({ animeId }) => {
   const [anime, setAnime] = useState(null);
 
@@ -240,6 +244,10 @@ const AnimeBox = ({ animeId }) => {
     </Link>
   );
 };
+
+// ------------------------
+// Helper: Fetch Anime Info
+// ------------------------
 
 const fetchAnimeInfo = async (id) => {
   const query = `
