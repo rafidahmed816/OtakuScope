@@ -37,7 +37,7 @@ const Home = () => {
       try {
         const trendingQuery = `
           query {
-            Page(page: 1, perPage: 6) {
+            Page(page: 1, perPage: 1) {
               media(sort: TRENDING_DESC, type: ANIME) {
                 id
                 title {
@@ -56,7 +56,7 @@ const Home = () => {
         `;
         const favoritesQuery = `
           query {
-            Page(page: 1, perPage: 6) {
+            Page(page: 1, perPage: 1) {
               media(sort: FAVOURITES_DESC, type: ANIME) {
                 id
                 title {
@@ -75,7 +75,7 @@ const Home = () => {
         `;
         const popularQuery = `
           query {
-            Page(page: 1, perPage: 6) {
+            Page(page: 1, perPage: 1) {
               media(season: FALL, seasonYear: 2024, sort: POPULARITY_DESC, type: ANIME) {
                 id
                 title {

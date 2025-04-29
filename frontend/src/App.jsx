@@ -14,6 +14,8 @@ import AnimeDetails from './pages/AnimeDetails';
 import Character from './components/Character';
 import Staff from './components/Staff';
 import Status from './components/Status';
+import AllLists from './pages/AllLists';
+import ListDetailsPublic from './pages/ListDetailsPublic';
 
 const theme = createTheme({
     palette: {
@@ -43,6 +45,8 @@ const App = () => (
                 <Route path="/lists" element={<Lists />} />
                 <Route path="/lists/:listId" element={<ListDetails />} />
                 <Route path="/profile/:username" element={<Profile />} />
+                <Route path="/all-lists" element={<AllLists />} />
+                <Route path="/public-list/:listId" element={<ListDetailsPublic />} />
                 {/* <Route path="/forum" element={<Forum />} /> */}
             </Routes>
         </Router>
