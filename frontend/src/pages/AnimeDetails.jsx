@@ -17,7 +17,9 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import "./../styles/AnimeDetails.css";
 import ReviewSection from "../components/ReviewSection";
-// import AddToListModal from "../components/AddToListModal";
+import AddToListModal from "../components/AddToListModal";
+import Navbar from "../components/Navbar";
+
 const backendPath = "http://localhost:5000";
 
 const StatusButton = ({
@@ -283,36 +285,7 @@ const AnimeDetails = () => {
     fetchDetails();
   }, [id]);
 
-  const handleUpdate = async () => {
-    try {
-      console.log("Sending update with:", {
-        watch_status,
-        is_favorite: isFavorite,
-        score,
-      });
-
-      const response = await axios.post(
-        `${backendPath}/api/anime/${id}`,
-        {
-          status: watch_status,
-          is_favorite: isFavorite,
-          score,
-        },
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      );
-      console.log("Update response:", response.data);
-      setSnackbar({
-        open: true,
-        message: "Updated successfully!",
-        severity: "success",
-      });
-    } catch (err) {
-      setSnackbar({ open: true, message: "Update failed!", severity: "error" });
-    }
-  };
-
+  
   const handleCloseSnackbar = () => {
     setSnackbar({ ...snackbar, open: false });
   };
@@ -320,6 +293,8 @@ const AnimeDetails = () => {
   if (loading) return <CircularProgress />;
 
   return (
+    <>
+    <Navbar />
     <Box className="anime-container">
       {anime ? (
         <>
@@ -383,7 +358,7 @@ const AnimeDetails = () => {
                 <Button onClick={() => setOpenAddModal(true)}>
                   Add to Lists..
                 </Button>
-                {/* <AddToListModal
+                <AddToListModal
                   open={openAddModal}
                   onClose={() => setOpenAddModal(false)}
                   animeId={id} // pass the anime id
@@ -395,7 +370,7 @@ const AnimeDetails = () => {
                       severity: "success",
                     });
                   }}
-                /> */}
+                />
               </div>
             </div>
           </div>
@@ -594,6 +569,7 @@ const AnimeDetails = () => {
         <p>© 2023 Anime Reviews. All rights reserved.</p>
       </div>
     </Box>
+    </>
   );
 };
 
