@@ -414,6 +414,191 @@
     align-items: center;
   }
 
+/* Stats Section Styles */
+.statsContainer {
+  padding: 20px;
+  color: white;
+}
+
+.statsHeader {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #ff7bac;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+.statsSection {
+  background: rgba(30, 30, 40, 0.7);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.statsSection h3 {
+  color: #ff7bac;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.statItem {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.statLabel {
+  color: #aaa;
+}
+
+.statValue {
+  color: white;
+  font-weight: bold;
+}
+
+/* Quick Stats */
+.quickStats {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.statCard {
+  background: rgba(40, 40, 60, 0.7);
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  flex: 1;
+}
+
+.statNumber {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ff7bac;
+}
+
+.statLabel {
+  font-size: 14px;
+  color: #aaa;
+}
+
+/* Anime Grid */
+.animeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.animeCard {
+  background: rgba(30, 30, 40, 0.8);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+
+.animeCard:hover {
+  transform: scale(1.05);
+}
+
+.animeCard img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.animeTitle {
+  padding: 8px;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.progress, .score {
+  padding: 0 8px 8px;
+  font-size: 11px;
+  color: #aaa;
+}
+
+/* Charts */
+.statusChart {
+  margin-top: 15px;
+}
+
+.chartBar {
+  height: 30px;
+  margin-bottom: 8px;
+  background: linear-gradient(90deg, #ff7bac, #ff2d75);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  font-size: 12px;
+  color: white;
+  transition: width 0.5s ease;
+}
+
+.noDataMessage {
+  color: #777;
+  font-style: italic;
+  padding: 20px;
+  text-align: center;
+  background: rgba(30, 30, 40, 0.5);
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+.statsSections {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.statsSection {
+  background: rgba(30, 30, 40, 0.7);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.no-stats-message {
+  text-align: center;
+  padding: 40px 20px;
+  background: rgba(30, 30, 40, 0.5);
+  border-radius: 10px;
+  margin: 20px 0;
+}
+
+.no-stats-message p {
+  color: #aaa;
+  font-size: 18px;
+  margin: 15px 0;
+}
+
+.empty-icon {
+  width: 100px;
+  opacity: 0.7;
+}
+
+.browse-button {
+  background: #ff7bac;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.browse-button:hover {
+  background: #ff2d75;
+}
+
 
 
   

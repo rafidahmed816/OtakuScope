@@ -6,4 +6,4 @@ function MyAnime() {
   )
 }
 
-export default MyAnime
+export default MyAnime;

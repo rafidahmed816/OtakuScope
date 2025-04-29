@@ -57,7 +57,7 @@ CREATE TABLE `anime_details` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `anime_id` int NOT NULL,
-  `status` enum('Plan to Watch','Watching','Watched') DEFAULT 'Plan to Watch',
+  `status` varchar(20) DEFAULT NULL,
   `is_favorite` tinyint(1) DEFAULT '0',
   `score` tinyint DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -65,7 +65,7 @@ CREATE TABLE `anime_details` (
   UNIQUE KEY `user_id` (`user_id`,`anime_id`),
   CONSTRAINT `anime_details_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `anime_details_chk_1` CHECK (((`score` is null) or (`score` between 1 and 10)))
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

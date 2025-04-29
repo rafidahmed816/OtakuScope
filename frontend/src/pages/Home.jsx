@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import Navbar from "./Navbar";
-import "./../styles/Home.css";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import StarIcon from "@mui/icons-material/Star";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import {
+  Box,
   Card,
   CardContent,
   CardMedia,
-  Typography,
-  Grid,
+  Chip,
   Container,
-  Box,
+  Grid,
   Skeleton,
-  Chip
+  Typography
 } from "@mui/material";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import StarIcon from "@mui/icons-material/Star";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import "../styles/Home.css";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -173,20 +173,20 @@ const Home = () => {
                   >
                     {item.title.english || item.title.romaji}
                   </Typography>
-
+                  
                   {item.genres && item.genres.length > 0 && (
                     <Box className="genre-container">
                       {item.genres.slice(0, 2).map((genre) => (
-                        <Chip
-                          key={genre}
-                          label={genre}
+                        <Chip 
+                          key={genre} 
+                          label={genre} 
                           size="small"
                           className="genre-chip"
                         />
                       ))}
                     </Box>
                   )}
-
+                  
                   {item.averageScore && (
                     <Box className="score-container">
                       <StarIcon className="star-icon" />
@@ -195,7 +195,7 @@ const Home = () => {
                       </Typography>
                     </Box>
                   )}
-
+                  
                   <Typography
                     variant="body2"
                     className="anime-description"
