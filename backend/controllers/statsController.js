@@ -1,58 +1,49 @@
-const { getDBConnection } = require('../config/db'); // Import getDBConnection
+const { getDBConnection } = require('../config/db');
 
 const getStats = async (req, res) => {
     const userId = req.user.id;
 
     try {
-        console.log("Fetching stats for user ID:", userId); // Log the user ID
+        console.log("Fetching stats for user ID:", userId);
 
         // Get a database connection
         const connection = await getDBConnection();
 
-        // Execute all queries in parallel
+        // Execute queries for counts in parallel
         const [
             [totalResult],
             [watchingResult],
             [watchedResult],
-            [favoritesResult],
-            [favoriteAnimesResult],
-            [currentlyWatchingResult]
+            [favoritesResult]
         ] = await Promise.all([
             connection.execute('SELECT GetUserAnimeListCountFn(?) AS total_anime_count', [userId]),
             connection.execute('SELECT GetUserWatchingCount(?) AS watching_count', [userId]),
             connection.execute('SELECT GetUserWatchedCount(?) AS watched_anime_count', [userId]),
-            connection.execute('SELECT GetUserFavoritesCount(?) AS fav_count', [userId]),
-            connection.execute('CALL GetFavoriteAnimes(?)', [userId]),
-            connection.execute('CALL GetCurrentlyWatching(?)', [userId])
+            connection.execute('SELECT GetUserFavoritesCount(?) AS fav_count', [userId])
         ]);
 
-        // Parse results
+        // Parse count results
         const total = totalResult[0]?.total_anime_count || 0;
         const watching = watchingResult[0]?.watching_count || 0;
         const watched = watchedResult[0]?.watched_anime_count || 0;
+        const favoritesCount = favoritesResult[0]?.fav_count || 0;
         const planToWatch = total - watching - watched;
 
-        // Extract anime IDs from stored procedure results
-        const favoriteAnimeIds = favoriteAnimesResult.map(a => a.id);
-        const currentlyWatchingIds = currentlyWatchingResult.map(a => a.id);
+        // Now fetch the full anime data for favorites and currently watching
+        // Similar to how ListController.js handles it
+        const [currentlyWatchingAnime] = await connection.query(
+            `SELECT ad.* FROM anime_details ad
+             WHERE ad.user_id = ? AND ad.status = 'watching'
+             LIMIT 10`,
+            [userId]
+        );
 
-        // Fetch anime details for those IDs (if any)
-        let favoriteAnimeDetails = [];
-        let currentlyWatchingDetails = [];
-
-        if (favoriteAnimeIds.length > 0) {
-            const [favAnimes] = await connection.query(
-                `SELECT * FROM anime
-                WHERE id IN (?)`, [favoriteAnimeIds]);
-            favoriteAnimeDetails = favAnimes;
-        }
-
-        if (currentlyWatchingIds.length > 0) {
-            const [watchingAnimes] = await connection.query(
-                `SELECT * FROM anime
-                WHERE id IN (?)`, [currentlyWatchingIds]);
-            currentlyWatchingDetails = watchingAnimes;
-        }
+        const [favoriteAnime] = await connection.query(
+            `SELECT ad.* FROM anime_details ad
+             WHERE ad.user_id = ? AND ad.is_favorite = 1
+             LIMIT 10`,
+            [userId]
+        );
 
         // Handle distribution calculation to avoid NaN
         const distribution = total > 0
@@ -62,9 +53,9 @@ const getStats = async (req, res) => {
                 plan_to_watch: ((planToWatch / total) * 100).toFixed(1)
             }
             : {
-                watching: 0,
-                watched: 0,
-                plan_to_watch: 0
+                watching: "0",
+                watched: "0",
+                plan_to_watch: "0"
             };
 
         // Send the response
@@ -72,9 +63,9 @@ const getStats = async (req, res) => {
             totalAnime: total,
             watching: watching,
             watched: watched,
-            favoritesCount: favoritesResult[0]?.fav_count || 0,
-            currentlyWatching: currentlyWatchingDetails,
-            favoriteAnime: favoriteAnimeDetails,
+            favoritesCount: favoritesCount,
+            currentlyWatching: currentlyWatchingAnime || [],
+            favoriteAnime: favoriteAnime || [],
             distribution: distribution
         });
     } catch (error) {

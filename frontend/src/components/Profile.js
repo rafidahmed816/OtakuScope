@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { FiLogOut } from "react-icons/fi";
 import "../styles/Profile.css";
 import Navbar from "../components/Navbar";
@@ -500,10 +500,19 @@ return (
                   {stats.currentlyWatching && stats.currentlyWatching.length > 0 ? (
                     <div className="animeGrid">
                       {stats.currentlyWatching.map(anime => (
-                        <div key={anime.id} className="animeCard">
-                          <img src={anime.image || '/default-anime.jpg'} alt={anime.title} />
-                          <div className="animeTitle">{anime.title}</div>
-                        </div>
+                        <Link to={`/anime/${anime.id}`} key={anime.id}>
+                          <div className="animeCard">
+                            <img 
+                              src={`https://img.anili.st/media/${anime.id}`} 
+                              alt={anime.title} 
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = '/default-anime.jpg';
+                              }}
+                            />
+                            <div className="animeTitle">{anime.title}</div>
+                          </div>
+                        </Link>
                      ))}
                     </div>
                   ) : (
@@ -517,11 +526,20 @@ return (
                  {stats.favoriteAnime && stats.favoriteAnime.length > 0 ? (
                     <div className="animeGrid">
                       {stats.favoriteAnime.map(anime => (
-                        <div key={anime.id} className="animeCard favorite">
-                          <img src={anime.image || '/default-anime.jpg'} alt={anime.title} />
-                          <div className="animeTitle">{anime.title}</div>
-                          <div className="score">★ {anime.score || 'N/A'}</div>
-                        </div>
+                        <Link to={`/anime/${anime.id}`} key={anime.id}>
+                          <div className="animeCard favorite">
+                            <img 
+                              src={`https://img.anili.st/media/${anime.id}`} 
+                              alt={anime.title} 
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = '/default-anime.jpg';
+                              }}
+                            />
+                            <div className="animeTitle">{anime.title}</div>
+                            <div className="score">★ {anime.score || 'N/A'}</div>
+                          </div>
+                        </Link>
                       ))}
                     </div>
                   ) : (

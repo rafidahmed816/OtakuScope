@@ -410,7 +410,7 @@ const AnimeDetails = () => {
                   <strong>Format:</strong> TV
                 </p>
                 <p>
-                  <strong>Episodes:</strong> {anime.episodes || "N/A"}
+                  {/*<strong>Episodes:</strong> {anime.episodes || "N/A"}*/}
                 </p>
                 <p>
                   <strong>Episode Duration:</strong> {anime.duration || "N/A"}{" "}
