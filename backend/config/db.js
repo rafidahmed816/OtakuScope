@@ -9,10 +9,9 @@ const getDBConnection = async () => {
       connection = await mysql.createConnection({
         host: "localhost",
         user: "root",
-        password: "7156213111566",
+        password: "./Baymax2024",
         database: "otakuscope",
       });
-       //  we're using single connection
     }
     return connection;
   } catch (err) {
@@ -32,12 +31,5 @@ const checkConnection = async () => {
   }
 };
 
-// Add this new function
-const endConnection = async () => {
-  if (connection) {
-    await connection.end();
-    connection = null;
-  }
-};
 
 module.exports = { getDBConnection, checkConnection };

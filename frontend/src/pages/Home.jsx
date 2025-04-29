@@ -8,9 +8,8 @@ import {
   CardMedia,
   Chip,
   Container,
-  Grid,
   Skeleton,
-  Typography
+  Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -35,68 +34,14 @@ const Home = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const trendingQuery = `
-          query {
-            Page(page: 1, perPage: 1) {
-              media(sort: TRENDING_DESC, type: ANIME) {
-                id
-                title {
-                  english
-                  romaji
-                }
-                coverImage {
-                  large
-                }
-                description
-                genres
-                averageScore
-              }
-            }
-          }
-        `;
-        const favoritesQuery = `
-          query {
-            Page(page: 1, perPage: 1) {
-              media(sort: FAVOURITES_DESC, type: ANIME) {
-                id
-                title {
-                  english
-                  romaji
-                }
-                coverImage {
-                  large
-                }
-                description
-                genres
-                averageScore
-              }
-            }
-          }
-        `;
-        const popularQuery = `
-          query {
-            Page(page: 1, perPage: 1) {
-              media(season: FALL, seasonYear: 2024, sort: POPULARITY_DESC, type: ANIME) {
-                id
-                title {
-                  english
-                  romaji
-                }
-                coverImage {
-                  large
-                }
-                description
-                genres
-                averageScore
-              }
-            }
-          }
-        `;
+        const trendingQuery = `query { Page(page: 1, perPage: 6) { media(sort: TRENDING_DESC, type: ANIME) { id title { english romaji } coverImage { large } description genres averageScore } } }`;
+        const favoritesQuery = `query { Page(page: 1, perPage: 6) { media(sort: FAVOURITES_DESC, type: ANIME) { id title { english romaji } coverImage { large } description genres averageScore } } }`;
+        const popularQuery = `query { Page(page: 1, perPage: 6) { media(season: FALL, seasonYear: 2024, sort: POPULARITY_DESC, type: ANIME) { id title { english romaji } coverImage { large } description genres averageScore } } }`;
 
         const [trendingData, favoritesData, popularData] = await Promise.all([
           fetchAniListData(trendingQuery),
           fetchAniListData(favoritesQuery),
-          fetchAniListData(popularQuery)
+          fetchAniListData(popularQuery),
         ]);
 
         setTrendingNow(trendingData.Page.media);
@@ -124,7 +69,6 @@ const Home = () => {
     return data.data;
   };
 
-  // For navigating to AnimeDetails.js with anime ID
   const handleCardClick = (id) => {
     navigate(`/anime/${id}`);
   };
@@ -139,87 +83,83 @@ const Home = () => {
   );
 
   const renderCards = (data, isLoading) => (
-    <Grid container spacing={3} justifyContent="flex-start">
+    <Box className="card-wrapper">
       {isLoading
         ? Array.from(new Array(6)).map((_, index) => (
-            <Grid item xs={12} sm={6} md={4} lg={2} key={index}>
-              <Card className="skeleton-card">
-                <Skeleton variant="rectangular" height={200} animation="wave" />
-                <CardContent>
-                  <Skeleton variant="text" width="80%" />
-                  <Skeleton variant="text" width="100%" />
-                </CardContent>
-              </Card>
-            </Grid>
+            <Card className="anime-card" key={index}>
+              <Skeleton variant="rectangular" height={200} animation="wave" />
+              <CardContent>
+                <Skeleton variant="text" width="80%" />
+                <Skeleton variant="text" width="100%" />
+              </CardContent>
+            </Card>
           ))
         : data.map((item) => (
-            <Grid item xs={12} sm={6} md={4} lg={2} key={item.id}>
-              <Card
-                onClick={() => handleCardClick(item.id)}
-                className="anime-card"
-              >
-                <CardMedia
-                  component="img"
-                  height="240"
-                  image={item.coverImage.large}
-                  alt={item.title.english || item.title.romaji}
-                  className="card-media"
-                />
-                <CardContent  className="card-content">
-                  <Typography
-                    variant="subtitle1"
-                    component="div"
-                    className="anime-title"
-                  >
-                    {item.title.english || item.title.romaji}
+            <Card
+              key={item.id}
+              className="anime-card"
+              onClick={() => handleCardClick(item.id)}
+            >
+              <CardMedia
+                component="img"
+                height="240"
+                image={item.coverImage.large}
+                alt={item.title.english || item.title.romaji}
+                className="card-media"
+              />
+              <CardContent className="card-content">
+                <Typography variant="subtitle1" className="anime-title">
+                  {item.title.english || item.title.romaji}
+                </Typography>
+
+                <Box className="genre-container">
+                  {item.genres.slice(0, 2).map((genre) => (
+                    <Chip
+                      key={genre}
+                      label={genre}
+                      size="small"
+                      className="genre-chip"
+                    />
+                  ))}
+                </Box>
+
+                <Box className="score-container">
+                  <StarIcon className="star-icon" />
+                  <Typography variant="body2" className="score-text">
+                    {item.averageScore / 10}/10
                   </Typography>
-                  
-                  {item.genres && item.genres.length > 0 && (
-                    <Box className="genre-container">
-                      {item.genres.slice(0, 2).map((genre) => (
-                        <Chip 
-                          key={genre} 
-                          label={genre} 
-                          size="small"
-                          className="genre-chip"
-                        />
-                      ))}
-                    </Box>
-                  )}
-                  
-                  {item.averageScore && (
-                    <Box className="score-container">
-                      <StarIcon className="star-icon" />
-                      <Typography variant="body2" className="score-text">
-                        {item.averageScore / 10}/10
-                      </Typography>
-                    </Box>
-                  )}
-                  
-                  <Typography
-                    variant="body2"
-                    className="anime-description"
-                  >
-                    {item.description?.replace(/<[^>]*>/g, "") || "No description available."}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
+                </Box>
+
+                <Typography variant="body2" className="anime-description">
+                  {item.description?.replace(/<[^>]*>/g, "") ||
+                    "No description available."}
+                </Typography>
+              </CardContent>
+            </Card>
           ))}
-    </Grid>
+    </Box>
   );
 
   return (
     <Box className="home-container">
       <Navbar />
       <Container maxWidth="xl" className="content-container">
-        {renderSectionHeading("Trending Now", <TrendingUpIcon className="trending-icon"  />)}
+        {renderSectionHeading(
+          "Trending Now",
+          <TrendingUpIcon className="trending-icon" />
+        )}
         {renderCards(trendingNow, loading)}
 
-        {renderSectionHeading("All-Time Favorites", <FavoriteIcon className="favorites-icon"  />)}
+        {renderSectionHeading(
+          "All-Time Favorites",
+          <FavoriteIcon className="favorites-icon" />
+        )}
         {renderCards(allTimeFavorites, loading)}
 
-        {renderSectionHeading("Popular This Season", <StarIcon className="popular-icon"  />)}
+        {renderSectionHeading(
+          "Popular This Season",
+          <StarIcon className="popular-icon" />
+        )}
         {renderCards(popularThisSeason, loading)}
       </Container>
     </Box>

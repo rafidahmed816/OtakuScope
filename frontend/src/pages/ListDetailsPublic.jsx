@@ -82,7 +82,7 @@ const ListDetailsPublic = () => {
       <div
         style={{
           padding: "24px",
-          backgroundColor: "black",
+          backgroundColor: "#272727",
           color: "white",
           minHeight: "100vh",
         }}

@@ -5,11 +5,9 @@ import GetStarted from './components/GetStarted';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Home from './pages/Home';
-
 import Lists from './pages/Lists';
 import ListDetails from './pages/ListDetails';
 import Profile from './components/Profile';
-//import Forum from './components/Forum';
 import AnimeDetails from './pages/AnimeDetails';
 import Character from './components/Character';
 import Staff from './components/Staff';
