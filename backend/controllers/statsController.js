@@ -26,20 +26,33 @@ const getStats = async (req, res) => {
             connection.execute('CALL GetCurrentlyWatching(?)', [userId])
         ]);
 
-        // Release the connection back to the pool
-        //connection.release();
-        
-        console.log("Total Result:", totalResult);
-       /* console.log("Watching Result:", watchingResult);
-        console.log("Watched Result:", watchedResult);
-        console.log("Favorites Result:", favoritesResult);
-        */
-
-        // Calculate statistics
+        // Parse results
         const total = totalResult[0]?.total_anime_count || 0;
         const watching = watchingResult[0]?.watching_count || 0;
         const watched = watchedResult[0]?.watched_anime_count || 0;
         const planToWatch = total - watching - watched;
+
+        // Extract anime IDs from stored procedure results
+        const favoriteAnimeIds = favoriteAnimesResult.map(a => a.id);
+        const currentlyWatchingIds = currentlyWatchingResult.map(a => a.id);
+
+        // Fetch anime details for those IDs (if any)
+        let favoriteAnimeDetails = [];
+        let currentlyWatchingDetails = [];
+
+        if (favoriteAnimeIds.length > 0) {
+            const [favAnimes] = await connection.query(
+                `SELECT * FROM anime
+                WHERE id IN (?)`, [favoriteAnimeIds]);
+            favoriteAnimeDetails = favAnimes;
+        }
+
+        if (currentlyWatchingIds.length > 0) {
+            const [watchingAnimes] = await connection.query(
+                `SELECT * FROM anime
+                WHERE id IN (?)`, [currentlyWatchingIds]);
+            currentlyWatchingDetails = watchingAnimes;
+        }
 
         // Handle distribution calculation to avoid NaN
         const distribution = total > 0
@@ -60,17 +73,8 @@ const getStats = async (req, res) => {
             watching: watching,
             watched: watched,
             favoritesCount: favoritesResult[0]?.fav_count || 0,
-            currentlyWatching: currentlyWatchingResult.map(item => ({
-                id: item.id,
-                title: item.title_romaji,
-                image: item.cover_image
-            })),
-            favoriteAnime: favoriteAnimesResult.map(item => ({
-                id: item.id,
-                title: item.title_romaji,
-                image: item.cover_image,
-                score: item.score
-            })),
+            currentlyWatching: currentlyWatchingDetails,
+            favoriteAnime: favoriteAnimeDetails,
             distribution: distribution
         });
     } catch (error) {
