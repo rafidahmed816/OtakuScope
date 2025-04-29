@@ -2,7 +2,7 @@ const { getDBConnection } = require('../config/db');
 
 // Create a new list
 exports.createList = async (req, res) => {
-  const userId = req.userId;
+  const userId = req.user.id;
   const { name } = req.body;
 
   if (!name) return res.status(400).json({ message: 'List name is required' });
@@ -20,7 +20,7 @@ exports.createList = async (req, res) => {
 // Get all lists with anime for a user
 // controllers/lists.js
 exports.getLists = async (req, res) => {
-    const userId = req.userId;
+    const userId = req.user.id;
     try {
       const db = await getDBConnection();
   
@@ -67,7 +67,7 @@ exports.getLists = async (req, res) => {
 
 // Get anime IDs inside a specific list
 exports.getAnimeInList = async (req, res) => {
-  const userId = req.userId;
+  const userId = req.user.id;
   const { listId } = req.params;
 
   try {
@@ -91,7 +91,7 @@ exports.getAnimeInList = async (req, res) => {
 
 // Add an anime to a list
 exports.addAnimeToList = async (req, res) => {
-  const userId = req.userId;
+  const userId = req.user.id;
   const { listId } = req.params;
   const { animeId } = req.body;
 
@@ -119,7 +119,7 @@ exports.addAnimeToList = async (req, res) => {
 
 // Delete an anime from a list
 exports.deleteAnimeFromList = async (req, res) => {
-  const userId = req.userId;
+  const userId = req.user.id;
   const { listId, animeId } = req.params;
 
   try {
@@ -142,7 +142,7 @@ exports.deleteAnimeFromList = async (req, res) => {
 };
 // Get all lists of the user with anime count
 exports.getUserLists = async (req, res) => {
-    const userId = req.userId;
+    const userId = req.user.id;
     try {
       const db = await getDBConnection();
       const [lists] = await db.query(`

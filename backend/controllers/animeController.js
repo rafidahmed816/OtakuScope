@@ -2,7 +2,7 @@ const {getDBConnection} = require("../config/db");
 
 const getAnimeDetails = async (req, res) => {
     const animeId = req.params.id;
-    const userId = req.userId;
+    const userId = req.user.id;
 
     try {
         const connection = await getDBConnection();
@@ -30,7 +30,7 @@ const getAnimeDetails = async (req, res) => {
 // Save or update anime interaction
 const saveOrUpdateAnimeInteraction = async (req, res) => {
     try {
-        const userId = req.userId;
+        const userId = req.user.id;
         const animeId = req.params.id;
         const { status, is_favorite, score } = req.body;
         console.log(`Anime interaction: user=${userId}, anime=${animeId}, status=${status}, is_favorite=${is_favorite}, score=${score}`);

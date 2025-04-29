@@ -6,10 +6,10 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Home from './pages/Home';
 
-import Lists from './components/Lists';
+import Lists from './pages/Lists';
 import ListDetails from './pages/ListDetails';
 import Profile from './components/Profile';
-import Forum from './components/Forum';
+//import Forum from './components/Forum';
 import AnimeDetails from './pages/AnimeDetails';
 import Character from './components/Character';
 import Staff from './components/Staff';
@@ -42,8 +42,8 @@ const App = () => (
                 <Route path="/home" element={<Home />} />
                 <Route path="/lists" element={<Lists />} />
                 <Route path="/lists/:listId" element={<ListDetails />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/forum" element={<Forum />} />
+                <Route path="/profile/:username" element={<Profile />} />
+                {/* <Route path="/forum" element={<Forum />} /> */}
             </Routes>
         </Router>
     </ThemeProvider>

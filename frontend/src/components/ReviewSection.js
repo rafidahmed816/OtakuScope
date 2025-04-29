@@ -238,8 +238,10 @@ const ReviewSection = ({ animeId }) => {
     );
 };
 
-export default ReviewSection;
 
 ReviewSection.propTypes = {
     animeId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
 };
+
+export default ReviewSection;
+

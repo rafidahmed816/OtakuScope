@@ -8,7 +8,7 @@ exports.createOrUpdateReview = async (req, res) => {
     try {
         conn = await getDBConnection();
         const { anime_id, review_title, review_content } = req.body;
-        const user_id = req.userId;
+        const user_id = req.user.id;
 
         // Check if review exists
         const [existing] = await conn.query(
@@ -79,7 +79,7 @@ exports.deleteReview = async (req, res) => {
     try {
         conn = await getDBConnection();
         const { id } = req.params;
-        const user_id = req.userId;
+        const user_id = req.user.id;
 
         const [review] = await conn.query(
             'SELECT * FROM anime_reviews WHERE id = ? AND user_id = ?',
